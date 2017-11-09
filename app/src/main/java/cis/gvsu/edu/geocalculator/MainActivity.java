@@ -2,19 +2,23 @@ package cis.gvsu.edu.geocalculator;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Button;
-import android.widget.TextView;
-import android.location.Location;
-import java.text.DecimalFormat;
-import java.math.RoundingMode;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import org.joda.time.DateTime;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+import cis.gvsu.edu.geocalculator.dummy.HistoryContent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText p2Lng = null;
     private TextView distance = null;
     private TextView bearing = null;
+    public static final int HISTORY_RESULT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
         calcButton.setOnClickListener(v -> {
             updateScreen();
+            HistoryContent.HistoryItem item = new HistoryContent.HistoryItem(p1Lat.toString(),
+                    p1Lng.toString(), p2Lat.toString(), p2Lng.toString(), DateTime.now());
+            HistoryContent.addItem(item);
+
         });
     }
 
@@ -115,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
             String bStr = "Bearing: " + df.format(b) + " " + this.bearingUnits;
             bearing.setText(bStr);
             hideKeyboard();
+            HistoryContent.HistoryItem item = new HistoryContent.HistoryItem(Double.toString(lat1),
+                    Double.toString(lng1),Double.toString(lat2), Double.toString(lng2), DateTime.now());
+            HistoryContent.addItem(item);
         } catch (Exception e) {
             return;
         }
@@ -138,6 +150,13 @@ public class MainActivity extends AppCompatActivity {
             this.bearingUnits = data.getStringExtra("bearingUnits");
             this.distanceUnits = data.getStringExtra("distanceUnits");
             updateScreen();
+        } else if (resultCode == HISTORY_RESULT) {
+            String[] vals = data.getStringArrayExtra("item");
+            this.p1Lat.setText(vals[0]);
+            this.p1Lng.setText(vals[1]);
+            this.p2Lat.setText(vals[2]);
+            this.p2Lng.setText(vals[3]);
+            this.updateScreen();  // code that updates the calcs.
         }
     }
 

@@ -3,6 +3,7 @@ package cis.gvsu.edu.geocalculator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cis.gvsu.edu.geocalculator.dummy.HistoryContent;
-import cis.gvsu.edu.geocalculator.dummy.HistoryContent.DummyItem;
+import cis.gvsu.edu.geocalculator.dummy.HistoryContent.HistoryItem;
 
 /**
  * A fragment representing a list of Items.
@@ -56,7 +57,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_history_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -105,6 +106,6 @@ public class HistoryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(HistoryItem item);
     }
 }
